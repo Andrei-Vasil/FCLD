@@ -63,8 +63,11 @@ class HashTableST():
         """
             Add a value to the HT
         """
-        self.size += 1
-        self.hashtable[self.hashfnc(k)].append(k)
+        hash_pos = self.hashfnc(k)
+        if not self.exists(k):
+            self.size += 1
+            self.hashtable[hash_pos].append(k)
+        return (hash_pos, self.hashtable[hash_pos].index(k))
 
     def remove(self, k: any) -> None:
         """
@@ -86,3 +89,12 @@ class HashTableST():
             if val == k:
                 return True
         return False
+
+    def save_to_file(self, path):
+        with open(path, 'w') as file:
+            file.write("ST\n")
+            for hashnudal in self.hashtable:
+                file.write(str(hashnudal) + "\n")
+
+    def __str__(self):
+        return str(self.hashtable)
