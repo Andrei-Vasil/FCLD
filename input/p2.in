@@ -1,0 +1,13 @@
+// p2:
+{
+    int a, b;
+    a = 6;
+    b = 8;
+    while (a != b) {
+        if (a >= b) {
+            a = a - b;
+        } else {
+            b = b - a;
+        }
+    }
+}

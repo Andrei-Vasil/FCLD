@@ -1,0 +1,14 @@
+// p3:
+{
+    int[] v = [1, 2, 3];
+    int n, i, max;
+    n = 3;
+    i = 0;
+    max = v[i];
+    while (i < n) {
+        if (max < v[i]) {
+            max = v[i];
+        }
+        i = i + 1;
+    }
+}
