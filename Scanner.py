@@ -14,7 +14,7 @@ class Scanner:
 
         self.reserved_expressions = re.compile('^(if|else|while|print|int|bool|string|print|read)$')
         self.number = re.compile('^-{,1}[1-9]+[0-9]*$')
-        self.string = re.compile('^(\'|\")( a-zA-Z.;:?!)*(\'|\")$')
+        self.string = re.compile('^(\'|\")[ a-zA-Z.;:?!]*(\'|\")$')
         self.identifier = re.compile('^[a-zA-Z]+[a-zA-Z0-9_-]*$')
         self.operator = re.compile('^(\+|-|/|\*|=|==|!=|<|>|<=|>=|&&|\|\|)$')
         self.deliminator = re.compile('^(;|\{|\}| |\n|,|\(|\))$')
@@ -24,14 +24,21 @@ class Scanner:
         file = open(input_path, 'r')
         
         expression = ''
+        is_string = False
         while file:
             byte = file.read(1)
+            
+            if byte == "\"":
+                is_string = not is_string
+
             if byte == '':
                 break
             if self.comment.match(expression + byte):
                 print("comment")
                 file.readline()
                 expression = ''
+            elif is_string and byte == ' ':
+                expression += byte
             elif self.deliminator.match(byte):
                 self.pif.add_reserved(byte)
                 if expression == '':
