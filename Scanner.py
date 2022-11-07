@@ -34,39 +34,37 @@ class Scanner:
             if byte == '':
                 break
             if self.comment.match(expression + byte):
-                print("comment")
                 file.readline()
                 expression = ''
             elif is_string and byte == ' ':
                 expression += byte
             elif self.deliminator.match(byte):
-                self.pif.add_reserved(byte)
                 if expression == '':
                     continue
                 elif self.reserved_expressions.match(expression) is not None:
-                    print('reserved expr')
                     self.pif.add_reserved(expression)
                 elif self.number.match(expression) is not None:
-                    print('number')
                     pos = self.constants.add(expression)
-                    self.pif.add_constant(pos)
+                    self.pif.add_constant(pos)  # add const
+                    print(pos, expression, "number")
                 elif self.string.match(expression) is not None:
-                    print('string')
                     pos = self.constants.add(expression)
-                    self.pif.add_constant(pos)
+                    self.pif.add_constant(pos)  # add const
+                    print(pos, expression, "string")
                 elif self.identifier.match(expression) is not None:
-                    print('id')
                     pos = self.identifiers.add(expression)
-                    self.pif.add_identifier(pos)
+                    self.pif.add_identifier(pos)  # add id
                 elif self.operator.match(expression) is not None:
-                    print('operator')
                     self.pif.add_reserved(expression)
                 else:
                     print(expression)
                     print('lexical error')
                     exit(1)
-                print(expression + "\n")
+                # print(expression + "\n")
                 expression = ''
+
+                if byte != ' ' and byte != '\n':
+                    self.pif.add_reserved(byte)
             else:
                 expression += byte
         # print(self.constants.hashtable)

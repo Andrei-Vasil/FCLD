@@ -16,7 +16,7 @@ class HashTableST():
 
     def __init__(self):
         self._size = 0
-        self.cap = 10
+        self.cap = 21
         self.hashtable = [[] for _ in range(self.cap)]
 
     @property
@@ -26,8 +26,8 @@ class HashTableST():
     @size.setter
     def size(self, value: int) -> None:
         self._size = value
-        if self.size >= self.cap // 2:
-            self.scaleup()
+        # if self.size >= self.cap // 2:
+        #     self.scaleup()
     
     def hashfnc(self, k: any) -> int:
         """

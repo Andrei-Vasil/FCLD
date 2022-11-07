@@ -6,8 +6,8 @@
     a = 0;
     a = -1;
     b = 2;
-    c = +3;
-    if ((a > b || a > b) && a > c) {
+    c = 5+3;
+    if ((a >= b || a > b) && a > c) {
         print(a);
     } else {
         if (b > c) {
