@@ -3,6 +3,7 @@
     int a, b, c;
     string s;
     s = "abc abc";
+    a = 0;
     a = -1;
     b = 2;
     c = +3;

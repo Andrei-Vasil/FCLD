@@ -13,7 +13,7 @@ class Scanner:
         self.pif = PIF()
 
         self.reserved_expressions = re.compile('^(if|else|while|print|int|bool|string|print|read)$')
-        self.number = re.compile('^(-|\+){,1}[1-9]+[0-9]*$')
+        self.number = re.compile('^((-|\+){,1}[1-9]+[0-9]*)|0$')
         self.string = re.compile('^(\'|\")[ a-zA-Z.;:?!]*(\'|\")$')
         self.identifier = re.compile('^[a-zA-Z]+[a-zA-Z0-9_-]*$')
         self.operator = re.compile('^(\+|-|/|\*|=|==|!=|<|>|<=|>=|&&|\|\|)$')
