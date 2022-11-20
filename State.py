@@ -11,7 +11,7 @@ class State:
         self.transitions[state].append(char)
     
     def is_DFA(self):
-        for _, value in self.__transitions.items():
+        for _, value in self.transitions.items():
             if len(value) > 1:
                 return False
         return True
