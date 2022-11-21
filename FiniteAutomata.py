@@ -79,4 +79,4 @@ def read_FA(file_path):
 
 
 if __name__ == '__main__':
-    print(read_FA('input/fa.in').is_DFA())
+    print(read_FA('input/fa2.in').is_DFA())
