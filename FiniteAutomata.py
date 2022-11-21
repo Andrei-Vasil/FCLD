@@ -30,9 +30,11 @@ class FiniteAutomata:
     def accept(self, word):
         now = None
         for state in self.states.values():
-            if state.is_initial:
+            if state.initial:
                 now = state
                 break
+        if now is None:
+            return False
         idx = 0
         while idx < len(word):
             edges = now.transitions
@@ -41,7 +43,7 @@ class FiniteAutomata:
                 idx += 1 
             else:
                 return False
-        return idx == len(word) and now.is_final
+        return idx == len(word) and now.final
 
 
 def read_FA(file_path):
@@ -79,4 +81,6 @@ def read_FA(file_path):
 
 
 if __name__ == '__main__':
-    print(read_FA('input/fa2.in').is_DFA())
+    FA = read_FA('input/fa.in')
+    print(FA.accept('13'))
+    print(FA.is_DFA())
