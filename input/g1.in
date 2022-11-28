@@ -6,4 +6,6 @@ P = {
     A -> ( S ) | int C,
     int B -> + S | e,
     C -> * A | e
+    B -> + S ,
+    C -> * A
 }
