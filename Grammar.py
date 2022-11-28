@@ -20,7 +20,7 @@ class Grammar:
         for rule in rules:
             lhs, rhs = rule.split('->')
             lhs = lhs.strip()
-            rhs = [value.strip() for value in rhs.split('|')]
+            rhs = [filter(lambda c: c != '', (value.split(' '))) for value in rhs.split('|')]
 
             for value in rhs:
                 result.append((lhs, value))
@@ -62,24 +62,25 @@ class Grammar:
 
         for rule in self.P:
             lhs, rhs = rule
-            if len(rhs) > 1:
+            if len(lhs) > 1:
                 return False
             elif lhs not in self.N:
                 return False
 
-            for rh in rhs:
-                for r in rh:
-                    if not (r in self.N or r in self.E or r == 'E'):
-                        return False
+            for r in rhs:
+                if not (r in self.N or r in self.E or r == 'e'):
+                    return False
 
         return True
 
     def __str__(self):
         return 'N = { ' + ', '.join(self.N) + ' }\n' \
                + 'E = { ' + ', '.join(self.E) + ' }\n' \
-               + 'P = { ' + ', '.join([' -> '.join(prod) for prod in self.P]) + ' }\n' \
+               + 'P = { ' + ', '.join([(prod[0] + ' -> ' + " ".join(prod[1])) for prod in self.P]) + ' }\n' \
                + 'S = ' + str(self.S) + '\n'
 
 
 if __name__ == '__main__':
-    print(Grammar.fromFile('input/g1.in'))
+    grammar = Grammar.fromFile('input/g1.in')
+    print(grammar)
+    print(grammar.checkIfCFG())
