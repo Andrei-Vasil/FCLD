@@ -39,6 +39,41 @@ class Grammar:
     def isTerminal(self, value):
         return value in self.E
 
+    def getProductionsFor(self, nonTerminal):
+        if not self.isNonTerminal(nonTerminal):
+            raise Exception('Can only show productions for non-terminals')
+        return [prod for prod in self.P if prod[0] == nonTerminal]
+
+    def showProductionsFor(self, nonTerminal):
+        productions = self.getProductionsFor(nonTerminal)
+        print(', '.join([' -> '.join(prod) for prod in productions]))
+
+    def checkIfCFG(self):
+        checkStartingSymbol = False
+
+        for rule in self.P:
+            lhs, rhs = rule
+            if self.S == lhs:
+                checkStartingSymbol = True
+                break
+
+        if not checkStartingSymbol:
+            return False
+
+        for rule in self.P:
+            lhs, rhs = rule
+            if len(rhs) > 1:
+                return False
+            elif lhs not in self.N:
+                return False
+
+            for rh in rhs:
+                for r in rh:
+                    if not (r in self.N or r in self.E or r == 'E'):
+                        return False
+
+        return True
+
     def __str__(self):
         return 'N = { ' + ', '.join(self.N) + ' }\n' \
                + 'E = { ' + ', '.join(self.E) + ' }\n' \
