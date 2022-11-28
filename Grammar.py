@@ -62,14 +62,14 @@ class Grammar:
 
         for rule in self.P:
             lhs, rhs = rule
-            if len(rhs) > 1:
+            if len(lhs) > 1:
                 return False
             elif lhs not in self.N:
                 return False
 
             for rh in rhs:
                 for r in rh:
-                    if not (r in self.N or r in self.E or r == 'E'):
+                    if not (r in self.N or r in self.E or r == 'e'):
                         return False
 
         return True
@@ -82,4 +82,5 @@ class Grammar:
 
 
 if __name__ == '__main__':
-    print(Grammar.fromFile('input/g1.in'))
+    print(Grammar.fromFile('input/g2.in'))
+    print(Grammar.fromFile('input/g2.in').checkIfCFG())
