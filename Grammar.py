@@ -1,7 +1,7 @@
 class Grammar:
     @staticmethod
     def parseLine(line):
-        return [value.strip() for value in line.strip().split('=')[1].strip()[1:-1].strip().split(',')]
+        return [value.strip() for value in line.strip().split('=')[1].strip()[1:-1].strip().split('\n')]
 
     @staticmethod
     def fromFile(fileName):
@@ -18,6 +18,7 @@ class Grammar:
         result = []
 
         for rule in rules:
+            print(rule)
             lhs, rhs = rule.split('->')
             lhs = lhs.strip()
             rhs = [value.strip() for value in rhs.split('|')]
@@ -82,5 +83,5 @@ class Grammar:
 
 
 if __name__ == '__main__':
-    print(Grammar.fromFile('input/g2.in'))
-    print(Grammar.fromFile('input/g2.in').checkIfCFG())
+    print(Grammar.fromFile('input/gl.in'))
+    print(Grammar.fromFile('input/gl.in').checkIfCFG())
