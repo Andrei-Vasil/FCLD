@@ -1,5 +1,5 @@
-N = { main compound_stmt stmt simple_stmt decl_list type primitive_type array_type identifier_list assign_stmt expression term factor io_stmt struct_stmt if_stmt while_stmt condition relation constant }
-E = { ; , [ ] ( ) { } = < <= == != >= > bool char integer string identifier constant + - * / print read if else while }
+N = $ main compound_stmt stmt simple_stmt decl_stmt type primitive_type array_type identifier_list assign_stmt expression term factor io_stmt struct_stmt if_stmt while_stmt condition relation constant #
+E = $ ; , [ ] ( ) { } = < <= == != >= > bool char integer string identifier constant + - * / print read if else while #
 S = main
 P = {
     main -> { compound_stmt }
@@ -8,7 +8,7 @@ P = {
     simple_stmt -> decl_stmt | assign_stmt | io_stmt
     decl_stmt -> type identifier_list ;
     type -> primitive_type | array_type
-    primitive_type -> bool | char | integer | string | float
+    primitive_type -> bool | char | integer | string
     array_type -> primitive_type [ ]
     identifier_list -> identifier | identifier , identifier_list
     assign_stmt -> identifier = expression
