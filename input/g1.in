@@ -1,10 +1,10 @@
-N = { S A B C }
-E = { ( ) + * int }
+N = $ S A B C #
+E = $ ( ) + * int #
 S = S
 P = {
     S -> A B
     A -> ( S ) | int C
-    int B -> + S | e
+    B -> + S | e
     C -> * A | e
     B -> + S
     C -> * A

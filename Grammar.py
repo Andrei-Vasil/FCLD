@@ -87,11 +87,13 @@ class Grammar:
             second = second[:-2]
             P += '\t' + first + ' -> ' + second + '\n'
         return 'N = { ' + ', '.join(self.N) + ' }\n' \
-               + 'E = { ' + ', '.join(self.E) + '}\n' \
+               + 'E = { ' + ', '.join(self.E) + ' }\n' \
                + 'P = {\n' + P + '}\n' \
                + 'S = ' + str(self.S) + '\n'
 
 
 if __name__ == '__main__':
-    print(Grammar.fromFile('input/g2.in'))
-    print(Grammar.fromFile('input/g2.in').checkIfCFG())
+    print(Grammar.fromFile('input/g1.in'))
+    print(Grammar.fromFile('input/g1.in').checkIfCFG())
+    # print(Grammar.fromFile('input/g2.in'))
+    # print(Grammar.fromFile('input/g2.in').checkIfCFG())
