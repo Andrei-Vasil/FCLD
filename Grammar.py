@@ -1,4 +1,6 @@
 class Grammar:
+    enrichedGrammarStartingSymbol = 'S0'
+
     @staticmethod
     def parseLine(line):
         return [value.strip() for value in line.split('$')[1].strip().split('#')[0].strip().split(' ')]

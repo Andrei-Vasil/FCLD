@@ -1,4 +1,6 @@
 from enum import Enum
+from Item import Item
+from Grammar import Grammar
 
 class StateType(Enum):
     ACCEPT = 1
@@ -18,20 +20,20 @@ class State:
         self.items = items
         firstItem = list(items.keys())[0]
         self.stateType = StateType.SHIFT_REDUCE_CONFLICT
-        if len(items) == 1 and len(firstItem.rhs) == firstItem.dotPosition and firstItem.lhs == Grammar.enrichedGrammarStartingSymbol:
+        if len(items) == 1 and len(firstItem.rhs) == firstItem.dotPos and firstItem.lhs == Grammar.enrichedGrammarStartingSymbol:
             self.stateType = StateType.ACCEPT
-        elif len(items) == 1 and len(firstItem.rhs) == firstItem.dotPosition:
+        elif len(items) == 1 and len(firstItem.rhs) == firstItem.dotPos:
             self.stateType = StateType.REDUCE
-        elif len(items) > 0 and testCond(items, lambda it: len(it.rhs) > it.dotPosition):
+        elif len(items) > 0 and testCond(items, lambda it: len(it.rhs) > it.dotPos):
             self.stateType = StateType.SHIFT
-        elif len(items) > 1 and testCond(items, lambda it: len(it.rhs) == it.dotPosition): 
+        elif len(items) > 1 and testCond(items, lambda it: len(it.rhs) == it.dotPos): 
             self.stateType = StateType.REDUCE_REDUCE_CONFLICT
 
     def getSymbolsSucceedingTheDot(self) -> list[str]:
         symbols = []
         for it in self.items:
-            if 0 <= it.dotPosition < len(it.rhs):
-                symbols.append(it.rhs[it.dotPosition])
+            if 0 <= it.dotPos < len(it.rhs):
+                symbols.append(it.rhs[it.dotPos])
         return symbols
 
     def __str__(self):
