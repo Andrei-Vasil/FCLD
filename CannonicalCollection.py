@@ -1,11 +1,12 @@
 from State import State
 
 class CanonicalCollection:
-    states = []
-    adjacencyList = dict()  # {(int, string): int}
+    def __init__(self):
+        self.states: list[State] = []
+        self.adjacencyList: dict[tuple[int, str], int] = dict()
 
     def addState(self, state: State):
-        self.states.add(state)
+        self.states.append(state)
 
     def connectStates(self, indexFirstState: int, symbol: str, indexSecondState: int):
-        self.adjacencyList[(indexFirstState, symbol)] = indexSecondState
+        self.adjacencyList[(indexFirstState, symbol[0][0])] = indexSecondState

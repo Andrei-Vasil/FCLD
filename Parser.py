@@ -5,43 +5,48 @@ from State import State
 from CannonicalCollection import CanonicalCollection
 import copy
 
-# TODO: lr(0)
 class Parser:
     def __init__(self, grammar: Grammar):
         self.grammar = grammar
-        self.workingGrammar = grammar
+        self.enrichedGrammar = grammar.getEnrichedGrammar()
 
     def closure(self, item: Item) -> State: 
         oldClosure = dict()
-        currentClosure = {item.deepCopy():None}
+        currentClosure = {item.deepCopy(): None}
         while True:
             oldClosure = copy.deepcopy(currentClosure)
             newClosure = copy.deepcopy(currentClosure)
-            for it in currentClosure:
+            for it in currentClosure.keys():
                 nonTerminal = self.getDotPrecededNonTerminal(it)
+                if nonTerminal is None:
+                    continue
                 for production in self.grammar.getProductionsFor(nonTerminal):
                     currentItem = Item(nonTerminal, production, 0)
-                    newClosure.add(currentItem)
+                    newClosure[currentItem] = None
             currentClosure = newClosure
-            if oldClosure == currentClosure:
+            if str(list(oldClosure.keys())[0]) == str(list(currentClosure.keys())[0]):
                 break
         return State(currentClosure)
 
     def getDotPrecededNonTerminal(self, item: Item):
-        if item.dotPos >= len(item.rhs) or item.dotPos < 0 :
+        if not (0 <= item.dotPos < len(item.rhs)):
             return None
         term = item.rhs[item.dotPos]
-        if term not in self.grammar.nonTerminals:
+        if term not in self.grammar.N:
             return None
         return term
 
     def goTo(self, state: State, element: str) -> State:
-        result = set()
+        result = dict()
         for item in state.items:
-            nonTerminal = item.rhs.getOrNull(item.dotPosition)
+            print(f'debug {item}')
+            nonTerminal = None
+            if 0 <= item.dotPos < len(item.rhs):
+                nonTerminal = item.rhs[item.dotPos]
             if nonTerminal == element:
-                nextItem = Item(item.lhs, item.rhs, item.dotPosition + 1)
-                result.addAll(self.closure(nextItem).items)
+                nextItem = Item(item.lhs, item.rhs, item.dotPos + 1)
+                for item in self.closure(nextItem).items:
+                    result[item] = None
         return State(result)
 
     def canonicalCollection(self) -> CanonicalCollection:
@@ -49,12 +54,42 @@ class Parser:
         canonicalCollection.addState(
             self.closure(
                 Item(
-                    self.workingGrammar.startingSymbol,
-                    self.workingGrammar.productionSet.getProductionsOf(self.workingGrammar.startingSymbol)[0],  # TODO: make this line work with our current architecture
+                    self.enrichedGrammar.S,
+                    self.enrichedGrammar.getProductionsFor(self.enrichedGrammar.S)[0][1][0],
                     0
                 )
             )
         )
+        print('==================================================')
+        item = Item(
+                    self.enrichedGrammar.S,
+                    self.enrichedGrammar.getProductionsFor(self.enrichedGrammar.S)[0][1][0],
+                    0
+                )
+        print(item)
+        print(item.lhs)
+        print(item.rhs)
+        print(item.dotPos)
+        print('==================================================')
+        print(self.closure(
+                Item(
+                    self.enrichedGrammar.S,
+                    self.enrichedGrammar.getProductionsFor(self.enrichedGrammar.S)[0][1][0][0],
+                    0
+                )
+            ))
+        print('==================================================')
         i = 0
-        while i < canonicalCollection.states.size:
-            pass
+        while i < len(canonicalCollection.states):
+            for symbol in canonicalCollection.states[i].getSymbolsSucceedingTheDot():
+                newState = self.goTo(canonicalCollection.states[i], symbol)
+                try:
+                    indexInStates = canonicalCollection.states.index(newState)
+                except ValueError:
+                    indexInStates = -1
+                if indexInStates == -1:
+                    canonicalCollection.addState(newState)
+                    indexInStates = len(canonicalCollection.states) - 1
+                canonicalCollection.connectStates(i, symbol, indexInStates)
+            i += 1
+        return canonicalCollection

@@ -2,11 +2,11 @@ class Grammar:
     enrichedGrammarStartingSymbol = 'S0'
 
     @staticmethod
-    def parseLine(line):
+    def parseLine(line) -> list[str]:
         return [value.strip() for value in line.split('$')[1].strip().split('#')[0].strip().split(' ')]
 
     @staticmethod
-    def fromFile(fileName):
+    def fromFile(fileName) -> 'Grammar':
         with open(fileName) as file:
             N = Grammar.parseLine(file.readline())
             E = Grammar.parseLine(file.readline())
@@ -28,11 +28,11 @@ class Grammar:
 
         return result
 
-    def __init__(self, N, E, P, S):
-        self.N = N
-        self.E = E
-        self.P = P
-        self.S = S
+    def __init__(self, N: list[str], E: list[str], P: list[tuple[list[str], list[list[str]]]], S: str):
+        self.N: list[str] = N
+        self.E: list[str] = E
+        self.P: list[tuple[list[str], list[list[str]]]] = P
+        self.S: str = S
 
     def isNonTerminal(self, value):
         return value in self.N
@@ -42,8 +42,8 @@ class Grammar:
 
     def getProductionsFor(self, nonTerminal):
         if not self.isNonTerminal(nonTerminal):
-            raise Exception('Can only show productions for non-terminals')
-        return [prod for prod in self.P if prod[0] == nonTerminal]
+            raise Exception(f'Can only show productions for non-terminals: {nonTerminal} is not non-terminal')
+        return [prod for prod in self.P if prod[0][0] == nonTerminal]
 
     def showProductionsFor(self, nonTerminal):
         productions = self.getProductionsFor(nonTerminal)
@@ -78,6 +78,14 @@ class Grammar:
                         return False
 
         return True
+    
+    def getEnrichedGrammar(self) -> 'Grammar':
+        if self.S == Grammar.enrichedGrammarStartingSymbol:
+            raise Exception('Grammar is already enriched')
+        newGrammar = Grammar(self.N, self.E, self.P, Grammar.enrichedGrammarStartingSymbol)
+        newGrammar.N.append(Grammar.enrichedGrammarStartingSymbol)
+        newGrammar.P.append(([Grammar.enrichedGrammarStartingSymbol], [[self.S]]))
+        return newGrammar
 
     def __str__(self):
         P = ''
@@ -92,10 +100,3 @@ class Grammar:
                + 'E = { ' + ', '.join(self.E) + ' }\n' \
                + 'P = {\n' + P + '}\n' \
                + 'S = ' + str(self.S) + '\n'
-
-
-if __name__ == '__main__':
-    print(Grammar.fromFile('input/g1.in'))
-    print(Grammar.fromFile('input/g1.in').checkIfCFG())
-    # print(Grammar.fromFile('input/g2.in'))
-    # print(Grammar.fromFile('input/g2.in').checkIfCFG())
