@@ -7,12 +7,14 @@ if __name__ == '__main__':
     input_file = 'input/g3.in'
     grammar = Grammar.fromFile(input_file)
     
-    print(grammar)
-    print(grammar.checkIfCFG())
-    print('[===================================]\n\n')
+    # print(grammar)
+    # print(grammar.checkIfCFG())
+    # print('[===================================]\n\n')
 
     parser = Parser(grammar)
     canonicalCollection = parser.canonicalCollection()
-    print(f'states: {[str(s) for s in canonicalCollection.states]}')
-    print(f'state transitions: {canonicalCollection.adjacencyList}')
-    print('[===================================]\n\n')
+    # print('states:')
+    # for i, s in enumerate(canonicalCollection.states):
+    #     print(f'#{i} {s}')
+    # print(f'state transitions: {canonicalCollection.adjacencyList}')
+    # print('[===================================]\n\n')

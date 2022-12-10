@@ -9,4 +9,5 @@ class CanonicalCollection:
         self.states.append(state)
 
     def connectStates(self, indexFirstState: int, symbol: str, indexSecondState: int):
-        self.adjacencyList[(indexFirstState, symbol[0][0])] = indexSecondState
+        print(symbol)
+        self.adjacencyList[(indexFirstState, symbol)] = indexSecondState

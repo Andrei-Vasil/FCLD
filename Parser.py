@@ -21,7 +21,7 @@ class Parser:
                 if nonTerminal is None:
                     continue
                 for production in self.grammar.getProductionsFor(nonTerminal):
-                    currentItem = Item(nonTerminal, production, 0)
+                    currentItem = Item(nonTerminal, *production[1], 0)
                     newClosure[currentItem] = None
             currentClosure = newClosure
             if str(list(oldClosure.keys())[0]) == str(list(currentClosure.keys())[0]):
@@ -39,7 +39,6 @@ class Parser:
     def goTo(self, state: State, element: str) -> State:
         result = dict()
         for item in state.items:
-            print(f'debug {item}')
             nonTerminal = None
             if 0 <= item.dotPos < len(item.rhs):
                 nonTerminal = item.rhs[item.dotPos]
@@ -60,33 +59,18 @@ class Parser:
                 )
             )
         )
-        print('==================================================')
-        item = Item(
-                    self.enrichedGrammar.S,
-                    self.enrichedGrammar.getProductionsFor(self.enrichedGrammar.S)[0][1][0],
-                    0
-                )
-        print(item)
-        print(item.lhs)
-        print(item.rhs)
-        print(item.dotPos)
-        print('==================================================')
-        print(self.closure(
-                Item(
-                    self.enrichedGrammar.S,
-                    self.enrichedGrammar.getProductionsFor(self.enrichedGrammar.S)[0][1][0][0],
-                    0
-                )
-            ))
-        print('==================================================')
         i = 0
         while i < len(canonicalCollection.states):
+            # print(canonicalCollection.states[i])
+            # print(canonicalCollection.states[i].getSymbolsSucceedingTheDot())
             for symbol in canonicalCollection.states[i].getSymbolsSucceedingTheDot():
                 newState = self.goTo(canonicalCollection.states[i], symbol)
-                try:
-                    indexInStates = canonicalCollection.states.index(newState)
-                except ValueError:
-                    indexInStates = -1
+                indexInStates = -1
+                for i, s in enumerate(canonicalCollection.states):
+                    if str(s) == str(newState):
+                        indexInStates = i
+                        break
+                    
                 if indexInStates == -1:
                     canonicalCollection.addState(newState)
                     indexInStates = len(canonicalCollection.states) - 1

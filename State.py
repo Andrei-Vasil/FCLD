@@ -18,7 +18,8 @@ def testCond(items: dict[Item], condition) -> bool:
 class State:
     def __init__(self, items: dict[Item]):
         self.items = items
-        firstItem = list(items.keys())[0]
+        if len(list(items.keys())) > 0:
+            firstItem = list(items.keys())[0]
         self.stateType = StateType.SHIFT_REDUCE_CONFLICT
         if len(items) == 1 and len(firstItem.rhs) == firstItem.dotPos and firstItem.lhs == Grammar.enrichedGrammarStartingSymbol:
             self.stateType = StateType.ACCEPT
@@ -31,10 +32,12 @@ class State:
 
     def getSymbolsSucceedingTheDot(self) -> list[str]:
         symbols = []
-        for it in self.items:
-            # print(it.rhs)
+        # print([str(it) for it in self.items.keys()])
+        for it in self.items.keys():
+            # print(it)
             if 0 <= it.dotPos < len(it.rhs):
                 symbols.append(it.rhs[it.dotPos])
+        # print('symbols:', symbols)
         return symbols
 
     def __str__(self):
