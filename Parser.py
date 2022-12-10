@@ -1,11 +1,28 @@
+import Grammar
+import Item
+
 # TODO: lr(0)
 
 class Parser:
-    def __init__(self, grammar):
+    # TODO: lr(0)
+
+    def __init__(self, grammar: Grammar):
         self.grammar = grammar
 
-    def closure(self, input):
-        P = {}
+    def closure(self, item: Item):
+        oldClosure = {}
+        currentClosure = item
+        while True:
+            oldClosure = currentClosure.toMutableSet()
+            newClosure = currentClosure.toMutableSet()
+            for it in currentClosure:
+                nonTerminal = getDotPrecededNonTerminal(it)
+                for production in grammar.getProductionsFor(nonTerminal):
+                    currentItem = Item(nonTerminal, production, 0)
+                    newClosure.add(currentItem)
+            currentClosure = newClosure
+            if oldClosure == currentClosure:
+                break
 
         return P
 
