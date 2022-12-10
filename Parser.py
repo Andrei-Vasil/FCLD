@@ -1,12 +1,10 @@
 import copy
 import Grammar
 import Item
+import State
 
 # TODO: lr(0)
-
 class Parser:
-    # TODO: lr(0)
-
     def __init__(self, grammar: Grammar):
         self.grammar = grammar
 
@@ -19,8 +17,8 @@ class Parser:
         return term
 
     def closure(self, item: Item):
-        oldClosure = {}
-        currentClosure = item
+        oldClosure = dict()
+        currentClosure = {item.deepCopy():None}
         while True:
             oldClosure = copy.deepcopy(currentClosure)
             newClosure = copy.deepcopy(currentClosure)
@@ -32,15 +30,10 @@ class Parser:
             currentClosure = newClosure
             if oldClosure == currentClosure:
                 break
-        return 
+        return State(currentClosure)
 
     def goTo(self, state, element: str):
         pass
 
     def canonicalCollection(self):
-        res = []
-        res.add(closure(""))
-        ok = True
-
-        while ok:
-            ok = False
+        pass
