@@ -32,12 +32,9 @@ class State:
 
     def getSymbolsSucceedingTheDot(self) -> list[str]:
         symbols = []
-        # print([str(it) for it in self.items.keys()])
         for it in self.items.keys():
-            # print(it)
             if 0 <= it.dotPos < len(it.rhs):
                 symbols.append(it.rhs[it.dotPos])
-        # print('symbols:', symbols)
         return symbols
 
     def __str__(self):

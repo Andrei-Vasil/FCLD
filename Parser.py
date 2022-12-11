@@ -24,7 +24,7 @@ class Parser:
                     currentItem = Item(nonTerminal, *production[1], 0)
                     newClosure[currentItem] = None
             currentClosure = newClosure
-            if str(list(oldClosure.keys())[0]) == str(list(currentClosure.keys())[0]):
+            if str(list(oldClosure.keys())[-1]) == str(list(currentClosure.keys())[-1]):
                 break
         return State(currentClosure)
 
@@ -61,14 +61,13 @@ class Parser:
         )
         i = 0
         while i < len(canonicalCollection.states):
-            # print(canonicalCollection.states[i])
-            # print(canonicalCollection.states[i].getSymbolsSucceedingTheDot())
             for symbol in canonicalCollection.states[i].getSymbolsSucceedingTheDot():
                 newState = self.goTo(canonicalCollection.states[i], symbol)
+
                 indexInStates = -1
-                for i, s in enumerate(canonicalCollection.states):
+                for ind, s in enumerate(canonicalCollection.states):
                     if str(s) == str(newState):
-                        indexInStates = i
+                        indexInStates = ind
                         break
                     
                 if indexInStates == -1:

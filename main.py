@@ -13,8 +13,8 @@ if __name__ == '__main__':
 
     parser = Parser(grammar)
     canonicalCollection = parser.canonicalCollection()
-    # print('states:')
-    # for i, s in enumerate(canonicalCollection.states):
-    #     print(f'#{i} {s}')
-    # print(f'state transitions: {canonicalCollection.adjacencyList}')
-    # print('[===================================]\n\n')
+    print('states:')
+    for i, s in enumerate(canonicalCollection.states):
+        print(f'#{i} {s}')
+    print(f'state transitions: {canonicalCollection.adjacencyList}')
+    print('[===================================]\n\n')

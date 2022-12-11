@@ -1,8 +1,8 @@
 N = $ S A #
-E = $ a b c #
+E = $ a b #
 S = S
 P = {
-    S -> a A
-    A -> b A
-    A -> c
+    S -> A A
+    A -> a A
+    A -> b
 }
