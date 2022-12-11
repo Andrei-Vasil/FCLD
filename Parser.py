@@ -3,6 +3,7 @@ from Grammar import Grammar
 from Item import Item
 from State import State
 from CannonicalCollection import CanonicalCollection
+import itertools
 import copy
 
 class Parser:
@@ -21,7 +22,7 @@ class Parser:
                 if nonTerminal is None:
                     continue
                 for production in self.grammar.getProductionsFor(nonTerminal):
-                    currentItem = Item(nonTerminal, *production[1], 0)
+                    currentItem = Item(nonTerminal, list(itertools.chain(*production[1])), 0)
                     newClosure[currentItem] = None
             currentClosure = newClosure
             if str(list(oldClosure.keys())[-1]) == str(list(currentClosure.keys())[-1]):
