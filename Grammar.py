@@ -49,6 +49,9 @@ class Grammar:
         productions = self.getProductionsFor(nonTerminal)
         print(', '.join([' -> '.join(prod) for prod in productions]))
 
+    def getOrderedProductions(self) -> list[tuple[list[str], list[list[str]]]]:
+        pass
+
     def checkIfCFG(self):
         checkStartingSymbol = False
 
