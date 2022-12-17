@@ -12,10 +12,10 @@ class Row:
 
     def __str__(self):
         if self.stateType == StateType.REDUCE:
-            return "REDUCE " + str(self.reductionIndex)
+            return f'REDUCE {self.reductionIndex}'
         elif self.stateType == StateType.ACCEPT:
-            return "ACCEPT"
+            return 'ACCEPT'
         elif self.stateType == StateType.SHIFT:
-            return "SHIFT " + str(self.reductionIndex)
+            return f'SHIFT {self.reductionIndex}'
         else:
             raise Exception("No other states allowed")

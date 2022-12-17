@@ -6,8 +6,7 @@ class Table:
         self.tableRow: dict[int, Row] = {}
 
     def __str__(self) -> str:
-        # s = ''
-        # for (rowIndex, row) in sorted(self.tableRow.items(), key=lambda x: (x[0])):
-        #     s += f'{rowIndex}: {row}\n'
-        # return s
-        return str(self.tableRow)
+        s = ''
+        for (rowIndex, row) in sorted(self.tableRow.items(), key=lambda x: (x[0])):
+            s += f'{rowIndex}: {str(row)}\n'
+        return s
