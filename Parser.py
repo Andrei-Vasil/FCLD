@@ -1,12 +1,15 @@
 # TODO: lr(0)
 from Grammar import Grammar
 from Item import Item
+from Row import Row
 from State import State
+from Table import Table
 from CannonicalCollection import CanonicalCollection
 from ParsingTreeRow import ParsingTreeRow
 from State import StateType
 import itertools
 import copy
+
 
 class Parser:
     def __init__(self, grammar: Grammar):
@@ -14,7 +17,7 @@ class Parser:
         self.enrichedGrammar: Grammar = grammar.getEnrichedGrammar()
         self.orderedProductions = grammar.getOrderedProductions()
 
-    def closure(self, item: Item) -> State: 
+    def closure(self, item: Item) -> State:
         oldClosure = dict()
         currentClosure = {item.deepCopy(): None}
         while True:
@@ -73,7 +76,7 @@ class Parser:
                     if str(s) == str(newState):
                         indexInStates = ind
                         break
-                    
+
                 if indexInStates == -1:
                     canonicalCollection.addState(newState)
                     indexInStates = len(canonicalCollection.states) - 1
@@ -129,3 +132,31 @@ class Parser:
             else:
                 raise Exception(str(tableValue.action))
         raise Exception('Something went terribly wrong')
+
+    def getParsingTable(self) -> Table:
+        canonicalCollection = CanonicalCollection()
+        table = Table()
+        for k in canonicalCollection.adjacencyList.keys():
+            state = canonicalCollection.states[k[0]]
+            if k[0] not in table.tableRow:
+                table.tableRow[k[0]] = Row(state.stateType, {}, None)
+            table.tableRow[k[0]].goTo[k[1]] = canonicalCollection.adjacencyList[k]
+
+        #         for ((index, state) in canonicalCollection.states.withIndex()) {
+        #             if (state.stateType == StateType.REDUCE) {
+        #                 table.tableRow[index] = Row(
+        #                     state.stateType,
+        #                     null,
+        #                     orderedProductions.indexOf(Pair(state.items.first().lhs, state.items.first().rhs))
+        #                 )
+        #             }
+        #             if (state.stateType == StateType.ACCEPT) {
+        #                 table.tableRow[index] = Row(
+        #                     state.stateType,
+        #                     null,
+        #                     null
+        #                 )
+        #             }
+        #         }
+
+        return table
