@@ -3,13 +3,16 @@ from Grammar import Grammar
 from Item import Item
 from State import State
 from CannonicalCollection import CanonicalCollection
+from ParsingTreeRow import ParsingTreeRow
+from State import StateType
 import itertools
 import copy
 
 class Parser:
     def __init__(self, grammar: Grammar):
-        self.grammar = grammar
-        self.enrichedGrammar = grammar.getEnrichedGrammar()
+        self.grammar: Grammar = grammar
+        self.enrichedGrammar: Grammar = grammar.getEnrichedGrammar()
+        self.orderedProductions = grammar.getOrderedProductions()
 
     def closure(self, item: Item) -> State: 
         oldClosure = dict()
@@ -77,3 +80,52 @@ class Parser:
                 canonicalCollection.connectStates(i, symbol, indexInStates)
             i += 1
         return canonicalCollection
+
+    def parse(self, word: list[str]) -> list[ParsingTreeRow]:
+        workingStack: list[tuple[str, int]] = []
+        remainingStack: list[str] = word
+        productionStack: list[int] = []
+        parsingTable = self.getParsingTable()
+        workingStack.append(("$", 0))
+
+        parsingTree: list[ParsingTreeRow] = []
+        treeStack: list[tuple[str, int]] = []
+
+        currentIndex = 0
+        while len(remainingStack) > 0 or len(workingStack) > 0:
+            if workingStack[-1][1] >= len(parsingTable.tableRow) or parsingTable.tableRow[workingStack[-1][1]] is None:
+                raise Exception(f'Invalid state {workingStack[-1][1]} in the working stack')
+            tableValue = parsingTable.tableRow[workingStack[-1][1]]
+            if tableValue.action == StateType.SHIFT:
+                if len(remainingStack) == 0 or remainingStack[0] is None:
+                    raise Exception('Action is shift but nothing else is left in the remaining stack')
+                token = remainingStack[0]
+                goto = tableValue.goto
+                if token >= len(goto) or goto[token] is None:
+                    raise Exception(f'Invalid symbol {token} for goto of state {workingStack.last().second}')
+                value = goto[token]
+                workingStack.append((token, value))
+                remainingStack.pop(0)
+                treeStack.append((token, currentIndex))
+                currentIndex += 1
+            elif tableValue.action == StateType.ACCEPT:
+                lastElement = treeStack.pop()
+                parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0], -1, -1))
+                return parsingTree
+            elif tableValue.action == StateType.REDUCE:
+                productionToReduceTo = self.orderedProductions[tableValue.reductionIndex]
+                parentIndex = currentIndex
+                currentIndex += 1
+                lastIndex = -1
+                for j in range(len(productionToReduceTo[1])):
+                    workingStack.pop()
+                    lastElement = treeStack.pop()
+                    parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0], parentIndex, lastIndex))
+                    lastIndex = lastElement[1]
+                treeStack.append((productionToReduceTo[0], parentIndex))
+                previous = workingStack[-1]
+                workingStack.append((productionToReduceTo[0], parsingTable.tableRow[previous[1]].goto[productionToReduceTo[0]]))
+                productionStack = [tableValue.reductionIndex] + productionStack
+            else:
+                raise Exception(str(tableValue.action))
+        raise Exception('Something went terribly wrong')
