@@ -2,7 +2,7 @@
 from Grammar import Grammar
 from Item import Item
 from Row import Row
-from State import State
+from State import State, StateType
 from Table import Table
 from CannonicalCollection import CanonicalCollection
 import itertools
@@ -89,22 +89,13 @@ class Parser:
             if k[0] not in table.tableRow:
                 table.tableRow[k[0]] = Row(state.stateType, {}, None)
             table.tableRow[k[0]].goTo[k[1]] = canonicalCollection.adjacencyList[k]
-
-        #         for ((index, state) in canonicalCollection.states.withIndex()) {
-        #             if (state.stateType == StateType.REDUCE) {
-        #                 table.tableRow[index] = Row(
-        #                     state.stateType,
-        #                     null,
-        #                     orderedProductions.indexOf(Pair(state.items.first().lhs, state.items.first().rhs))
-        #                 )
-        #             }
-        #             if (state.stateType == StateType.ACCEPT) {
-        #                 table.tableRow[index] = Row(
-        #                     state.stateType,
-        #                     null,
-        #                     null
-        #                 )
-        #             }
-        #         }
+        for i, state in enumerate(canonicalCollection.states):
+            if state.stateType == StateType.REDUCE:
+                # TODO check this:
+                table.tableRow[i] = Row(state.stateType, None,
+                                        self.orderedProductions.index(
+                                            (list(state.items.keys())[0], list(state.items.keys())[0])))
+            if state.stateType == StateType.ACCEPT:
+                table.tableRow[i] = Row(state.stateType, None, None)
 
         return table

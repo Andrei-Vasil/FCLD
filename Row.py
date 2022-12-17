@@ -5,7 +5,7 @@ from State import StateType
 
 @dataclass
 class Row:
-    def __init__(self, stateType: StateType, goTo: dict, reductionIndex: int or None):
+    def __init__(self, stateType: StateType, goTo: dict or None, reductionIndex: int or None):
         self.stateType = stateType
         self.goTo = goTo
         self.reductionIndex = reductionIndex
