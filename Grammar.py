@@ -50,7 +50,11 @@ class Grammar:
         print(', '.join([' -> '.join(prod) for prod in productions]))
 
     def getOrderedProductions(self) -> list[tuple[list[str], list[list[str]]]]:
-        pass
+        productionList: list[tuple[list[str], list[list[str]]]] = []
+        for production in self.P:
+            for rhs in production[1]:
+                productionList.append((production[0], rhs))
+        return productionList
 
     def checkIfCFG(self):
         checkStartingSymbol = False
