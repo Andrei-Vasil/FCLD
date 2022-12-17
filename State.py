@@ -2,6 +2,7 @@ from enum import Enum
 from Item import Item
 from Grammar import Grammar
 
+
 class StateType(Enum):
     ACCEPT = 1
     REDUCE = 2
@@ -9,11 +10,13 @@ class StateType(Enum):
     REDUCE_REDUCE_CONFLICT = 4
     SHIFT_REDUCE_CONFLICT = 5
 
+
 def testCond(items: dict[Item], condition) -> bool:
     result = True
     for it in items.keys():
         result = result and condition(it)
     return result
+
 
 class State:
     def __init__(self, items: dict[Item]):
@@ -21,13 +24,14 @@ class State:
         if len(list(items.keys())) > 0:
             firstItem = list(items.keys())[0]
         self.stateType = StateType.SHIFT_REDUCE_CONFLICT
-        if len(items) == 1 and len(firstItem.rhs) == firstItem.dotPos and firstItem.lhs == Grammar.enrichedGrammarStartingSymbol:
+        if len(items) == 1 and len(
+                firstItem.rhs) == firstItem.dotPos and firstItem.lhs == Grammar.enrichedGrammarStartingSymbol:
             self.stateType = StateType.ACCEPT
         elif len(items) == 1 and len(firstItem.rhs) == firstItem.dotPos:
             self.stateType = StateType.REDUCE
         elif len(items) > 0 and testCond(items, lambda it: len(it.rhs) > it.dotPos):
             self.stateType = StateType.SHIFT
-        elif len(items) > 1 and testCond(items, lambda it: len(it.rhs) == it.dotPos): 
+        elif len(items) > 1 and testCond(items, lambda it: len(it.rhs) == it.dotPos):
             self.stateType = StateType.REDUCE_REDUCE_CONFLICT
 
     def getSymbolsSucceedingTheDot(self) -> list[str]:

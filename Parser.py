@@ -1,17 +1,20 @@
 # TODO: lr(0)
 from Grammar import Grammar
 from Item import Item
+from Row import Row
 from State import State
+from Table import Table
 from CannonicalCollection import CanonicalCollection
 import itertools
 import copy
+
 
 class Parser:
     def __init__(self, grammar: Grammar):
         self.grammar = grammar
         self.enrichedGrammar = grammar.getEnrichedGrammar()
 
-    def closure(self, item: Item) -> State: 
+    def closure(self, item: Item) -> State:
         oldClosure = dict()
         currentClosure = {item.deepCopy(): None}
         while True:
@@ -70,10 +73,38 @@ class Parser:
                     if str(s) == str(newState):
                         indexInStates = ind
                         break
-                    
+
                 if indexInStates == -1:
                     canonicalCollection.addState(newState)
                     indexInStates = len(canonicalCollection.states) - 1
                 canonicalCollection.connectStates(i, symbol, indexInStates)
             i += 1
         return canonicalCollection
+
+    def getParsingTable(self) -> Table:
+        canonicalCollection = CanonicalCollection()
+        table = Table()
+        for k in canonicalCollection.adjacencyList.keys():
+            state = canonicalCollection.states[k[0]]
+            if k[0] not in table.tableRow:
+                table.tableRow[k[0]] = Row(state.stateType, {}, None)
+            table.tableRow[k[0]].goTo[k[1]] = canonicalCollection.adjacencyList[k]
+
+        #         for ((index, state) in canonicalCollection.states.withIndex()) {
+        #             if (state.stateType == StateType.REDUCE) {
+        #                 table.tableRow[index] = Row(
+        #                     state.stateType,
+        #                     null,
+        #                     orderedProductions.indexOf(Pair(state.items.first().lhs, state.items.first().rhs))
+        #                 )
+        #             }
+        #             if (state.stateType == StateType.ACCEPT) {
+        #                 table.tableRow[index] = Row(
+        #                     state.stateType,
+        #                     null,
+        #                     null
+        #                 )
+        #             }
+        #         }
+
+        return table
