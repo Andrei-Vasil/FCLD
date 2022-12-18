@@ -129,7 +129,7 @@ class Parser:
                 previous = workingStack[-1]
                 workingStack.append(
                     (
-                        productionToReduceTo[0], 
+                        productionToReduceTo[0],
                         parsingTable.tableRow[previous[1]].goTo[productionToReduceTo[0][0]]
                     )
                 )
