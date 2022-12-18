@@ -105,7 +105,7 @@ class Parser:
                 token = remainingStack[0]
                 goto = tableValue.goTo
                 if token not in goto or goto[token] is None:
-                    raise Exception(f'Invalid symbol {token} for goto of state {workingStack.last().second}')
+                    raise Exception(f'Invalid symbol {token} for goto of state {workingStack[-1][1]}')
                 value = goto[token]
                 workingStack.append((token, value))
                 remainingStack.pop(0)
@@ -128,10 +128,7 @@ class Parser:
                 treeStack.append((productionToReduceTo[0], parentIndex))
                 previous = workingStack[-1]
                 workingStack.append(
-                    (
-                        productionToReduceTo[0],
-                        parsingTable.tableRow[previous[1]].goTo[productionToReduceTo[0][0]]
-                    )
+                    (productionToReduceTo[0], parsingTable.tableRow[previous[1]].goTo[productionToReduceTo[0][0]])
                 )
                 productionStack = [tableValue.reductionIndex] + productionStack
             else:
