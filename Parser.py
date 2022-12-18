@@ -113,7 +113,7 @@ class Parser:
                 currentIndex += 1
             elif tableValue.stateType == StateType.ACCEPT:
                 lastElement = treeStack.pop()
-                parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0], -1, -1))
+                parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0][0], -1, -1))
                 return parsingTree
             elif tableValue.stateType == StateType.REDUCE:
                 productionToReduceTo = self.orderedProductions[tableValue.reductionIndex]
@@ -123,7 +123,7 @@ class Parser:
                 for _ in range(len(productionToReduceTo[1])):
                     workingStack.pop()
                     lastElement = treeStack.pop()
-                    parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0], parentIndex, lastIndex))
+                    parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0][0], parentIndex, lastIndex))
                     lastIndex = lastElement[1]
                 treeStack.append((productionToReduceTo[0], parentIndex))
                 previous = workingStack[-1]

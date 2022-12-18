@@ -24,14 +24,13 @@ if __name__ == '__main__':
     print(parser.getParsingTable())
 
     result = []
-    # try:
-    parseTree = parser.parse(['a', 'b', 'b', 'c'])
+    try:
+        parseTree = parser.parse(['a', 'b', 'b', 'c'])
 
-    for row in parseTree:
-        result.append(f'{row.index}: {row.info}, {row.parent}, {row.rightSibling}')
-    result.sort()
-    for r in result:
-        print(r)
-    # File("out.txt").writeText(result)
-    # except Exception as e:
-    #     print(e)
+        for row in parseTree:
+            result.append(f'{row.index}: {row.info}, {row.parent}, {row.rightSibling}')
+        result.sort()
+        for r in result:
+            print(r)
+    except Exception as e:
+        print(e)
