@@ -19,7 +19,7 @@ if __name__ == '__main__':
     print(f'state transitions: {canonicalCollection.adjacencyList}')
     print('[===================================]\n\n')
 
-    print(grammar.getEnrichedGrammar().getOrderedProductions())
+    print(grammar.getOrderedProductions())
     print('parsing table:')
     print(parser.getParsingTable())
 
