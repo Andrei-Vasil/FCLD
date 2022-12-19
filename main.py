@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     result = []
     try:
-        parseTree = parser.parse(['a', 'b', 'b', 'c'])
+        parseTree = parser.parse(['a', 'b', 'b', 'c', 'a'])
         # parseTree = parser.parse(['int', 'e', 'e'])
         # parseTree = parser.parse(['{', 'bool', 'identifier', ';', '}'])
 

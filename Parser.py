@@ -104,7 +104,6 @@ class Parser:
                     raise Exception('Action is shift but nothing else is left in the remaining stack')
                 token = remainingStack[0]
                 goto = tableValue.goTo
-                print(token, tableValue.goTo)
                 if token not in goto or goto[token] is None:
                     raise Exception(f'Invalid symbol {token} for goto of state {workingStack[-1][1]}')
                 value = goto[token]
@@ -115,6 +114,8 @@ class Parser:
             elif tableValue.stateType == StateType.ACCEPT:
                 lastElement = treeStack.pop()
                 parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0][0], -1, -1))
+                if len(remainingStack) > 0:
+                    raise Exception("Input stack is not empty but reached ACCEPT state")
                 return parsingTree
             elif tableValue.stateType == StateType.REDUCE:
                 productionToReduceTo = self.orderedProductions[tableValue.reductionIndex]
@@ -146,7 +147,6 @@ class Parser:
             table.tableRow[k[0]].goTo[k[1]] = canonicalCollection.adjacencyList[k]
         for i, state in enumerate(canonicalCollection.states):
             if state.stateType == StateType.REDUCE:
-                # TODO check this:
                 index = None
                 try:
                     index = self.orderedProductions.index(
