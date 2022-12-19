@@ -145,12 +145,11 @@ class Parser:
             table.tableRow[k[0]].goTo[k[1]] = canonicalCollection.adjacencyList[k]
         for i, state in enumerate(canonicalCollection.states):
             if state.stateType == StateType.REDUCE:
-                # TODO check this:
                 index = None
                 try:
                     index = self.orderedProductions.index(
                         ([list(state.items.keys())[0].lhs], list(state.items.keys())[0].rhs))
-                except Exception as e:
+                except ValueError:
                     pass
                 table.tableRow[i] = Row(state.stateType, None, index)
             if state.stateType == StateType.ACCEPT:
