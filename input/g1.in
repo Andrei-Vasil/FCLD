@@ -3,9 +3,9 @@ E = $ ( ) + * int #
 S = S
 P = {
     S -> A B
-    A -> ( S )
+    A -> ( S ) 
     A -> int C
-    B -> + S
+    B -> + S 
     B -> e
     C -> e
     B -> + S
