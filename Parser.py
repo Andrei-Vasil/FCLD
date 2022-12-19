@@ -146,9 +146,13 @@ class Parser:
         for i, state in enumerate(canonicalCollection.states):
             if state.stateType == StateType.REDUCE:
                 # TODO check this:
-                table.tableRow[i] = Row(state.stateType, None,
-                                        self.orderedProductions.index(
-                                            ([list(state.items.keys())[0].lhs], list(state.items.keys())[0].rhs)))
+                index = None
+                try:
+                    index = self.orderedProductions.index(
+                        ([list(state.items.keys())[0].lhs], list(state.items.keys())[0].rhs))
+                except Exception as e:
+                    pass
+                table.tableRow[i] = Row(state.stateType, None, index)
             if state.stateType == StateType.ACCEPT:
                 table.tableRow[i] = Row(state.stateType, None, None)
 
