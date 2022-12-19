@@ -104,6 +104,7 @@ class Parser:
                     raise Exception('Action is shift but nothing else is left in the remaining stack')
                 token = remainingStack[0]
                 goto = tableValue.goTo
+                print(token, tableValue.goTo)
                 if token not in goto or goto[token] is None:
                     raise Exception(f'Invalid symbol {token} for goto of state {workingStack[-1][1]}')
                 value = goto[token]
