@@ -114,6 +114,8 @@ class Parser:
             elif tableValue.stateType == StateType.ACCEPT:
                 lastElement = treeStack.pop()
                 parsingTree.append(ParsingTreeRow(lastElement[1], lastElement[0][0], -1, -1))
+                if len(remainingStack) > 0:
+                    raise Exception("Input stack is not empty but reached ACCEPT state")
                 return parsingTree
             elif tableValue.stateType == StateType.REDUCE:
                 productionToReduceTo = self.orderedProductions[tableValue.reductionIndex]

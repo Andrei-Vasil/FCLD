@@ -2,9 +2,9 @@ from Grammar import Grammar
 from Parser import Parser
 
 if __name__ == '__main__':
-    input_file = 'input/g1.in'
+    input_file = 'input/g3.in'
+    # input_file = 'input/g1.in'
     # input_file = 'input/g2.in'
-    # input_file = 'input/g3.in'
     grammar = Grammar.fromFile(input_file)
     
     # print(grammar)
@@ -25,7 +25,9 @@ if __name__ == '__main__':
 
     result = []
     try:
-        parseTree = parser.parse(['int', 'e', 'e'])
+        parseTree = parser.parse(['a', 'b', 'b', 'c', 'a'])
+        # parseTree = parser.parse(['int', 'e', 'e'])
+        # parseTree = parser.parse(['{', 'bool', 'identifier', ';', '}'])
 
         for row in parseTree:
             result.append(f'{row.index}: {row.info}, {row.parent}, {row.rightSibling}')
