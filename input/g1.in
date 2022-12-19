@@ -7,7 +7,6 @@ P = {
     A -> int C
     B -> + S 
     B -> e
-    C -> * A
     C -> e
     B -> + S
     C -> * A
