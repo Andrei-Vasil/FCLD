@@ -151,7 +151,7 @@ class Parser:
                 try:
                     index = self.orderedProductions.index(
                         ([list(state.items.keys())[0].lhs], list(state.items.keys())[0].rhs))
-                except Exception as e:
+                except ValueError:
                     pass
                 table.tableRow[i] = Row(state.stateType, None, index)
             if state.stateType == StateType.ACCEPT:

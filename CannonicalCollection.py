@@ -1,5 +1,6 @@
 from State import State
 
+
 class CanonicalCollection:
     def __init__(self):
         self.states: list[State] = []
