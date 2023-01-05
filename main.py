@@ -2,9 +2,9 @@ from Grammar import Grammar
 from Parser import Parser
 
 if __name__ == '__main__':
-    input_file = 'input/g3.in'
+    # input_file = 'input/g3.in'
     # input_file = 'input/g1.in'
-    # input_file = 'input/g2.in'
+    input_file = 'input/g2.in'
     grammar = Grammar.fromFile(input_file)
     
     # print(grammar)
@@ -25,14 +25,17 @@ if __name__ == '__main__':
 
     result = []
     try:
-        parseTree = parser.parse(['a', 'b', 'b', 'c', 'a'])
+        # parseTree = parser.parse(['a', 'b', 'b', 'c'])
         # parseTree = parser.parse(['int', 'e', 'e'])
         # parseTree = parser.parse(['{', 'bool', 'identifier', ';', '}'])
+        # parseTree = parser.parse(['{', 'print', '(', 'identifier', '+', 'constant', ')', ';', '}'])
+        # parseTree = parser.parse(['{', 'identifier', '=', 'identifier', '+', 'constant', ';', '}'])
+        # parseTree = parser.parse(['{', 'if', '(', 'identifier', '<=', 'identifier', ';', ')', '{', 'print', '(', 'constant', ')', ';', '}', '}'])
+        parseTree = parser.parse(['{', 'while', '(', 'identifier', '<=', 'identifier', ';', ')', '{', 'print', '(', 'constant', ')', ';', '}', '}'])
 
         for row in parseTree:
             result.append(f'{row.index}: {row.info}, {row.parent}, {row.rightSibling}')
-        result.sort()
-        for r in result:
+        for r in sorted(result, key=lambda x: int(x.split(':')[0])):
             print(r)
     except Exception as e:
         print(e)

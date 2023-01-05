@@ -18,4 +18,5 @@ class Row:
         elif self.stateType == StateType.SHIFT:
             return f'SHIFT {self.goTo}'
         else:
-            raise Exception("No other states allowed")
+            return f'No state: {self.goTo} {self.reductionIndex}'
+            # raise Exception("No other states allowed")
